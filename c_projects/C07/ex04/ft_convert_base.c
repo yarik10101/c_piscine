@@ -33,9 +33,14 @@ int check_base(char *base)
     return (1);
 }
 
-char *from_dec(int dec, char *base)
+char *from_dec(int dec, char *base, char **str)
 {
-
+    int size = 0;
+    int i = 0;
+    for (; base[size]; size++) {}
+    for (; dec > 0; dec /= size, i++)
+        *str[31 - i] = base[dec % size];
+    return (*(str + 32 - i));
 }
 
 int to_dec(char *str, char *base)
@@ -53,21 +58,29 @@ int to_dec(char *str, char *base)
 }
 // "ABCDEGH"
 
-int ft_atoi_base(char *str, char *base)
+ char *ft_convert_base(char *nbr, char *base_from, char *base_to)
 {
     int size = 0;
     int i = 0;
     int counter = 1;
     int result = 0;
-    if (!check_base(base))
-    return (0);
-    for (; is_symbol(str[i]); i++)
-        if (str[i] == '-')
-            counter *= -1;
-    if (!contains(str[i], base))
+    char *str;
+    if (!(check_base(base_from) && check_base(base_to)))
         return (0);
-    result = to_dec(str + i, base);
-    return (result * counter);
+    for (; is_symbol(nbr[i]); i++)
+        if (nbr[i] == '-')
+            counter *= -1;
+    if (!contains(nbr[i], base_from))
+        return (0);
+    result = to_dec(nbr + i, base_from);
+    str = from_dec(result, base_to, &str);
+
+    // if (counter < 0)
+    // {
+    //     *(str - 1) = '-';
+    //     str--;
+    // }
+    return (str);
 }
 
 int main(void)
@@ -75,4 +88,5 @@ int main(void)
     char *base = {(char *)"01"};
     printf("%d ", elem_count('3', base));
     printf("%d ", ft_atoi_base((char *)"1011010111001", base));
+    printf("%s ", ft_convert_base("5", "0123456789", "01"));
 }
