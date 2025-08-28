@@ -36,14 +36,15 @@ char **ft_split(char *str, char *charset)
     char **word_arr = malloc(sizeof(char *) * word_number);
     char *word;
     for (; str[i]; i++)
-        if (is_separator(str[i], charset) && !is_separator(str[i], charset) && str[i + 1] != '\0')
+        if (is_separator(str[i], charset) && !is_separator(str[i + 1], charset) && str[i + 1] != '\0')
         {
             word = malloc(sizeof(char) * length_count(str + i, charset));
-            for (int j = i + 1, w = 0; !is_separator(str[j], charset); j++, w++)
+            for (int j = i + 1, w = 0; !is_separator(str[j], charset) && str[j]; j++, w++)
                 word[w] = str[j];
             word_arr[k] = word;
             k++;
         }
+    return (word_arr);
 }
 
 void print_arr_arr(char **arr, int l)
@@ -59,7 +60,9 @@ void print_arr_arr(char **arr, int l)
 
 int main(void)
 {
-    printf("%d\n", word_counter("ppppppppppppppppp11tp1pp111p111111tp", "pt"));
+    // printf("%d\n", word_counter("ppppppppppppppppp11tp1pp111p111111tp", "pt"));
     char *arr[3] = {"pososi", "moi", "huec"};
-    print_arr_arr(arr, 3);
+    print_arr_arr(ft_split("1p234pt56pp", "pt"), 2);
+    // printf("%d ", length_count("ososakap", "p"));
+    // print_arr_arr(arr, 3);
 }
